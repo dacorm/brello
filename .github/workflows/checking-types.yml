@@ -1,0 +1,54 @@
+#name: Checking types
+#on:
+#  pull_request:
+#
+#jobs:
+#  check:
+#    name: ‍💻 Checking types
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: ⏬ Checkout
+#        uses: actions/checkout@v3
+#
+#      - name: ⚙️ Enable corepack
+#        run: corepack enable
+#
+#      - name: 📦 Setup pnpm
+#        uses: pnpm/action-setup@v2
+#        with:
+#          run_install: false
+#
+#      - name: 💾 Get pnpm store directory
+#        id: pnpm-cache
+#        shell: bash
+#        run: |
+#          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+#
+#      - name: 📦 Setup pnpm cache
+#        uses: actions/cache@v3
+#        with:
+#          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+#          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+#          restore-keys: |
+#            ${{ runner.os }}-pnpm-store-
+#
+#      - name: 🔍 Install dependencies
+#        run: pnpm install
+#
+#      - name: 🐧 Use Supabase CLI of latest version
+#        uses: supabase/setup-cli@v1
+#        with:
+#          version: latest
+#
+#      - name: 🚀 Start Supabase DB only
+#        run: make supabase.start.db-only
+#
+#      - name: ✅ Verify generated types match Postgres Schema
+#        run: |
+#          make supabase.generate.types
+#          pnpm run cs:fix
+#          if ! git diff --ignore-space-at-eol --exit-code --quiet ./src/shared/api/database.types.ts; then
+#            echo "Detected uncommitted changes after build. See status below:"
+#            git diff
+#            exit 1
+#          fi
