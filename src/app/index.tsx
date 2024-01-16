@@ -1,9 +1,10 @@
 import "./styles/index.css";
+import { SignInPage } from "@/pages/auth/sign-in/page.tsx";
 
 export function App() {
   return (
     <>
-      <h1>Brello</h1>
+      <SignInPage />
     </>
   );
 }

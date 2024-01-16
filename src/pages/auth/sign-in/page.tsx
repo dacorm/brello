@@ -6,15 +6,27 @@ import { IconArrowLeft, IconMail01 } from "@/shared/assets/icons";
 import { Button, FeaturedIcon, Input } from "@/shared/ui";
 
 import styles from "./styles.module.css";
-import { SignInError } from "@/pages/auth/sign-in/model.ts";
+import {
+  $email,
+  $error,
+  $finished,
+  $pending,
+  backToLoginClicked,
+  emailChanged,
+  formSubmitted,
+  SignInError,
+} from "./model.ts";
+import { useUnit } from "effector-react";
 
 export const PageLoader = () => {
   return <LayoutAuthn>Session loading…</LayoutAuthn>;
 };
 
 export const SignInPage = () => {
+  const finished = useUnit($finished);
+
   return (
-    <LayoutAuthn>{false ? <LoginSucceeded /> : <LoginForm />}</LayoutAuthn>
+    <LayoutAuthn>{finished ? <LoginSucceeded /> : <LoginForm />}</LayoutAuthn>
   );
 };
 
@@ -25,6 +37,9 @@ const errorText: { [Key in SignInError]: string } = {
 };
 
 const LoginForm: FC = () => {
+  const [email, pending, error] = useUnit([$email, $pending, $error]);
+  const [handleEmail, handleSubmit] = useUnit([emailChanged, formSubmitted]);
+
   return (
     <>
       <h1 className={styles.headline}>Sign in</h1>
@@ -37,14 +52,19 @@ const LoginForm: FC = () => {
         <Input
           className={styles.input}
           name="email"
-          disabled={false}
-          value={""}
-          error={false ? errorText["UnknownError"] : undefined}
+          disabled={pending}
+          value={email}
+          error={error ? errorText[error] : undefined}
           label="Email"
           placeholder="Enter your email"
-          onValue={() => 1}
+          onValue={handleEmail}
         />
-        <Button loading={false} className={styles.button} type="submit">
+        <Button
+          loading={pending}
+          onClick={handleSubmit}
+          className={styles.button}
+          type="submit"
+        >
           Get started
         </Button>
       </form>
@@ -53,6 +73,8 @@ const LoginForm: FC = () => {
 };
 
 const LoginSucceeded: FC = () => {
+  const [email, handleBackPressed] = useUnit([$email, backToLoginClicked]);
+
   return (
     <>
       <FeaturedIcon
@@ -63,12 +85,12 @@ const LoginSucceeded: FC = () => {
       <h1 className={styles.headline}>Check your email</h1>
       <p className={styles.description}>
         We sent a login link to{" "}
-        <span className={styles.descriptionAccent}>{""}</span>
+        <span className={styles.descriptionAccent}>{email}</span>
       </p>
       <Button
         variant="link-gray"
         className={styles.buttonBack}
-        onClick={() => console.log(1123)}
+        onClick={handleBackPressed}
       >
         <IconArrowLeft className={styles.backIcon} />
         Back to login
