@@ -84,7 +84,7 @@ const LoginSucceeded: FC = () => {
       />
       <h1 className={styles.headline}>Check your email</h1>
       <p className={styles.description}>
-        We sent a login link to{" "}
+        We sent a login link to
         <span className={styles.descriptionAccent}>{email}</span>
       </p>
       <Button
