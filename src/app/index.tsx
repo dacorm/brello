@@ -1,10 +1,10 @@
 import "./styles/index.css";
-import { SignInPage } from "@/pages/auth/sign-in/page.tsx";
+import { Pages } from "@/pages";
 
 export function App() {
   return (
     <>
-      <SignInPage />
+      <Pages />
     </>
   );
 }

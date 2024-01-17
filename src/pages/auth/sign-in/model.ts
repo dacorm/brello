@@ -1,8 +1,15 @@
 import { attach, createEvent, createStore, sample } from "effector";
 import { api } from "@/shared/api";
 import { not } from "patronum";
+import { chainAnonymous } from "@/shared/viewer";
+import { routes } from "@/shared/routing";
 
 export type SignInError = "UnknownError" | "InvalidEmail" | "RateLimit";
+
+export const currentRoute = routes.auth.signIn;
+export const anonymousRoute = chainAnonymous(currentRoute, {
+  otherwise: routes.home.open,
+});
 
 const signInFx = attach({ effect: api.auth.signInWithEmailFx });
 
