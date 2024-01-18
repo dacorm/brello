@@ -81,8 +81,8 @@ export const profileGetFx = createEffect<
   return {
     userId,
     email,
-    firstName: profiles[0].first_name as string,
-    lastName: profiles[0].last_name,
-    avatarUrl: profiles[0].avatar_url,
+    firstName: (profiles && (profiles.first_name as string)) || "",
+    lastName: (profiles && profiles.last_name) || "",
+    avatarUrl: (profiles && profiles.avatar_url) || "",
   };
 });
