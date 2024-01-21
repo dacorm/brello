@@ -6,3 +6,6 @@ export { FeaturedIcon } from "./featured-icon";
 export { Input } from "./input";
 export { SidebarNavigation } from "./sidebar-navigation";
 export { Loading } from "./loading";
+export { ImageUpload } from "./image-upload";
+export { Avatar } from "./avatar";
+export { visuallyHiddenStyles } from "./visually-hidden";
